@@ -210,7 +210,7 @@
 				</div>
 				<div class="row animate-box">
 					<div class="col-md-10 col-md-offset-1">
-						<form class="form-inline">
+						<form class="form-inline" id="updateForm">
 							<div class="col-md-4 col-sm-4">
 								<div class="form-group">
 									<label for="name" class="sr-only">Name</label>
@@ -224,7 +224,7 @@
 								</div>
 							</div>
 							<div class="col-md-4 col-sm-4">
-								<button type="submit" class="btn btn-primary btn-block">I am Attending</button>
+								<input type="button" class="btn btn-primary btn-block" onclick="javascript:submitRequest();" value="I am Attending"></input>
 							</div>
 						</form>
 					</div>
@@ -261,94 +261,158 @@
 
 	<!-- Google Map -->
 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhdgpeI11ZqCkfSnQigbi2kg-GH7x_jqY&callback=initMap"></script>
+	<script src="https://apis.google.com/js/client:plusone.js" type="text/javascript"></script>
+	<script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>
 	<!-- jQuery -->
 	
 	<!-- <script src="./js/main.js"></script>
 	<script src="./js/superfish.js"></script> -->
 	<input type="hidden" id="bigDate" value="Sep 25, 2018 20:00:00"/>
 	<script>
+		// Client ID and API key from the Developer Console
+		var API_KEY = "AIzaSyA59MYhfjsDAIr5_BMLz31j9AqHjii7FMg";
+		var CLIENT_ID = "661151747038-rtbjj3f7eh1vap4ivk9mi33tue70597b.apps.googleusercontent.com";
+
+		// Array of API discovery doc URLs for APIs used by the quickstart
+		var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
+
+		// Authorization scopes required by the API; multiple scopes can be
+		// included, separated by spaces.
+		var SCOPES = "https://www.googleapis.com/auth/spreadsheets";
+	
 		$(document).ready(function(){
 			// Add smooth scrolling to all links in navbar + footer link
 			$("#fh5co-menu-wrap a").on('click', function(event) {
-			// Make sure this.hash has a value before overriding default behavior
-			if (this.hash !== ""){
-				// Prevent default anchor click behavior
-				event.preventDefault();
+				// Make sure this.hash has a value before overriding default behavior
+				if (this.hash !== ""){
+					// Prevent default anchor click behavior
+					event.preventDefault();
 
-				// Store hash
-				var hash = this.hash;
+					// Store hash
+					var hash = this.hash;
 
-				// Using jQuery's animate() method to add smooth page scroll
-				// The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
-				$('html, body').animate({
-					scrollTop: $(hash).offset().top
-				}, 1200, function(){
+					// Using jQuery's animate() method to add smooth page scroll
+					// The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
+					$('html, body').animate({
+						scrollTop: $(hash).offset().top
+					}, 1200, function(){
 
-				// Add hash (#) to URL when done scrolling (default click behavior)
-				window.location.hash = hash;
+					// Add hash (#) to URL when done scrolling (default click behavior)
+					window.location.hash = hash;
+				});
+				} // End if
 			});
-			} // End if
-		});
 	  
-		$(window).scroll(function() {
-			$(".slideanim").each(function(){
-				var pos = $(this).offset().top;
+			$(window).scroll(function() {
+				$(".slideanim").each(function(){
+					var pos = $(this).offset().top;
 
-				var winTop = $(window).scrollTop();
-				if (pos < winTop + 600) {
-					$(this).addClass("slide");
-				}
+					var winTop = $(window).scrollTop();
+					if (pos < winTop + 600) {
+						$(this).addClass("slide");
+					}
+				});
 			});
 		});
-	});
 	
-	// Set the date we're counting down to
-	var countDownDate = new Date($("#bigDate").val()).getTime();
-
-	// Update the count down every 1 second
-	var x = setInterval(function() {
-		// Get todays date and time
-		var now = new Date().getTime();
-
-		// Find the distance between now an the count down date
-		var distance = countDownDate - now;
-
-		// Time calculations for days, hours, minutes and seconds
-		var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-		// Display the result in an element with id="demo"
-		// document.getElementById("demo").innerHTML = days + "Days " + hours + "Hours "
-		// + minutes + "Minutes " + seconds + "Seconds ";
-
-		// Display the result in an element with id="demo"
-		document.getElementById("days").innerHTML = days +" <small>days</small>";
-		document.getElementById("hours").innerHTML = hours + " <small>hours</small> ";
-		document.getElementById("minutes").innerHTML = minutes + " <small>minutes</small> ";
-		document.getElementById("seconds").innerHTML = seconds + " <small>seconds</small> ";
-
-		// If the count down is finished, write some text 
-		if (distance < 0) {
-			clearInterval(x);
-			document.getElementById("demo").innerHTML = "The Wedding Ceremony is Over";
+		function handleClientLoad() {
+			gapi.load('client:auth2', initClient);
 		}
-	}, 1000);
-	
-	function initMap() {
-		var myLatLng = {lat: 22.320853, lng: 114.1850367};
-		var map = new google.maps.Map(document.getElementById('map'), {
-			center: myLatLng,
-			zoom: 17
-		});
 		
-		var marker = new google.maps.Marker({
-			position: myLatLng,
-			map: map,
-			title: '九龍半山 Club ONE - 農圃道18號UG層'
-        });
-	}
+		/**
+		*  Initializes the API client library and sets up sign-in state
+		*  listeners.
+		*/
+		function initClient() {
+			gapi.client.init({
+				discoveryDocs: DISCOVERY_DOCS,
+				apiKey: API_KEY,
+				clientId: CLIENT_ID,
+				scope: SCOPES
+			}).then(function () {
+				// Listen for sign-in state changes.
+				//gapi.auth2.getAuthInstance().isSignedIn.listen();
+			});
+		}
+
+		
+		// Set the date we're counting down to
+		var countDownDate = new Date($("#bigDate").val()).getTime();
+
+		// Update the count down every 1 second
+		var x = setInterval(function() {
+			// Get todays date and time
+			var now = new Date().getTime();
+
+			// Find the distance between now an the count down date
+			var distance = countDownDate - now;
+
+			// Time calculations for days, hours, minutes and seconds
+			var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+			var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+			var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+			var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+			// Display the result in an element with id="demo"
+			// document.getElementById("demo").innerHTML = days + "Days " + hours + "Hours "
+			// + minutes + "Minutes " + seconds + "Seconds ";
+
+			// Display the result in an element with id="demo"
+			document.getElementById("days").innerHTML = days +" <small>days</small>";
+			document.getElementById("hours").innerHTML = hours + " <small>hours</small> ";
+			document.getElementById("minutes").innerHTML = minutes + " <small>minutes</small> ";
+			document.getElementById("seconds").innerHTML = seconds + " <small>seconds</small> ";
+
+			// If the count down is finished, write some text 
+			if (distance < 0) {
+				clearInterval(x);
+				document.getElementById("demo").innerHTML = "The Wedding Ceremony is Over";
+			}
+		}, 1000);
+		
+		function initMap() {
+			var myLatLng = {lat: 22.320853, lng: 114.1850367};
+			var map = new google.maps.Map(document.getElementById('map'), {
+				center: myLatLng,
+				zoom: 17
+			});
+			
+			var marker = new google.maps.Marker({
+				position: myLatLng,
+				map: map,
+				title: '九龍半山 Club ONE - 農圃道18號UG層'
+			});
+		}
+		
+		function submitRequest(){
+			/*gapi.client.sheets.spreadsheets.values.append({
+				spreadsheetId: '1-zplq7M61_o4389rnD-mS075-Ds1k-qqVnGQX9aH4t4',
+				range: 'vewedding!A2',
+			}).then(function(response) {
+				
+			}, function(response) {
+			  console.log('Error: ' + response.result.error.message);
+			});*/
+			
+			/*var param = "{\"values\": [[\"aaaa\"]]}";
+			$.ajax({
+				async: false,
+				url: "https://sheets.googleapis.com/v4/spreadsheets/1-zplq7M61_o4389rnD-mS075-Ds1k-qqVnGQX9aH4t4/values/A1:append",
+				type: 'POST',
+				data: $.parseJSON(param),
+				timeout: 1000,
+				cache: false,
+				error: function(XMLHttpRequest, textStatus, errorThrown) {
+				},
+				success: function(data, textStatus, XMLHttpRequest) {
+					if(XMLHttpRequest.responseText != null && XMLHttpRequest.responseText.length > 0){
+						alert("aaa");
+					}else{
+						alert("bbb");
+					}
+				}
+			});*/
+		}
 	</script>
 	</body>
 </html>
