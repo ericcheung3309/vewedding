@@ -320,6 +320,10 @@
 			gapi.load('client:auth2', initClient);
 		}
 		
+		function handleSignOutClick(event) {
+			gapi.auth2.getAuthInstance().signOut();
+		}
+		
 		/**
 		*  Initializes the API client library and sets up sign-in state
 		*  listeners.
@@ -337,7 +341,7 @@
 				// Handle the initial sign-in state.
 				updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
 				
-				document.getElementById('signout-button').onclick = handleSignoutClick;
+				document.getElementById('signout-button').onclick = handleSignOutClick;
 			});
 		}
 		
@@ -349,10 +353,6 @@
 				console.log("!isSignedIn");
 				document.getElementById('signout-button').style.display = 'none';
 			}
-		}
-
-		function handleSignOutClick(event) {
-			gapi.auth2.getAuthInstance().signOut();
 		}
 		
 		// Set the date we're counting down to
