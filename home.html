@@ -225,7 +225,7 @@
 							</div>
 							<div class="col-md-4 col-sm-4">
 								<input type="button" class="btn btn-primary btn-block" onclick="javascript:submitRequest();" value="I am Attending"></input>
-								<button id="signout-button" style="display: none;">Sign Out</button>
+								<!-- <button id="signout-button" style="display: none;">Sign Out</button> -->
 							</div>
 						</form>
 					</div>
@@ -341,17 +341,17 @@
 				// Handle the initial sign-in state.
 				updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
 				
-				document.getElementById('signout-button').onclick = handleSignOutClick;
+				//document.getElementById('signout-button').onclick = handleSignOutClick;
 			});
 		}
 		
 		function updateSigninStatus(isSignedIn) {
 			if (isSignedIn) {
 				console.log("isSignedIn");
-				document.getElementById('signout-button').style.display = 'block';
+				//document.getElementById('signout-button').style.display = 'block';
 			} else {
 				console.log("!isSignedIn");
-				document.getElementById('signout-button').style.display = 'none';
+				//document.getElementById('signout-button').style.display = 'none';
 			}
 		}
 		
@@ -430,6 +430,7 @@
 			
 				gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody).then(function(response) {
 					console.log(response.result);
+					gapi.auth2.getAuthInstance().signOut();
 				}, function(response) {
 					console.log('Error: ' + response.result.error.message);
 					gapi.auth2.getAuthInstance().signOut();
