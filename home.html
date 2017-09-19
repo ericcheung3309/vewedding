@@ -400,7 +400,7 @@
 			if(!gapi.auth2.getAuthInstance().isSignedIn.get()) {
 				gapi.auth2.getAuthInstance().signIn();
 			}
-			return dfd.resolve(true);
+			return deferred.resolve(true);
 		}
 		
 		function submitRequest(){
