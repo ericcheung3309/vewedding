@@ -417,7 +417,7 @@
 				// TODO: Add desired properties to the request body.
 			};
 		
-			gapi.client.sheets.spreadsheets.values.append(parames, valueRangeBody).then(function(response) {
+			gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody).then(function(response) {
 				console.log(response.result);
 			}, function(response) {
 				console.log('Error: ' + response.result.error.message);
