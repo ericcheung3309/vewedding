@@ -395,63 +395,48 @@
 			});
 		}
 		
-		function submitRequest(){
+		function signInGoogle(){
+			var deferred = $.Deferred();
 			if(!gapi.auth2.getAuthInstance().isSignedIn.get()) {
-				gapi.auth2.getAuthInstance().signIn({
-					callback: function(response){
-						alert("aaa");
-					}
-				});
+				gapi.auth2.getAuthInstance().signIn();
 			}
-			
-			var params = {
-				// The ID of the spreadsheet to update.
-				spreadsheetId: '1-zplq7M61_o4389rnD-mS075-Ds1k-qqVnGQX9aH4t4',  // TODO: Update placeholder value.
-
-				// The A1 notation of a range to search for a logical table of data.
-				// Values will be appended after the last row of the table.
-				range: 'vewedding!A2:B2',  // TODO: Update placeholder value.
-
-				// How the input data should be interpreted.
-				valueInputOption: 'RAW',  // TODO: Update placeholder value.
-
-				// How the input data should be inserted.
-				insertDataOption: 'INSERT_ROWS',  // TODO: Update placeholder value.
-			};
-			
-			var valueRangeBody = {
-				// TODO: Add desired properties to the request body.
-				"values": [
-					[$("#name").val(), $("#email").val()]
-				]
-			};
+			return dfd.resolve(true);
+		}
 		
-			gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody).then(function(response) {
-				console.log(response.result);
-				gapi.auth2.getAuthInstance().signOut();
-			}, function(response) {
-				console.log('Error: ' + response.result.error.message);
-				gapi.auth2.getAuthInstance().signOut();
-			});
-			
-			/*var param = "{\"values\": [[\"aaaa\"]]}";
-			$.ajax({
-				async: false,
-				url: "https://sheets.googleapis.com/v4/spreadsheets/1-zplq7M61_o4389rnD-mS075-Ds1k-qqVnGQX9aH4t4/values/A1:append",
-				type: 'POST',
-				data: $.parseJSON(param),
-				timeout: 1000,
-				cache: false,
-				error: function(XMLHttpRequest, textStatus, errorThrown) {
-				},
-				success: function(data, textStatus, XMLHttpRequest) {
-					if(XMLHttpRequest.responseText != null && XMLHttpRequest.responseText.length > 0){
-						alert("aaa");
-					}else{
-						alert("bbb");
-					}
+		function submitRequest(){
+			var signIn = signInGoogle().done(function(ret){
+				if(ret){
+					var params = {
+						// The ID of the spreadsheet to update.
+						spreadsheetId: '1-zplq7M61_o4389rnD-mS075-Ds1k-qqVnGQX9aH4t4',  // TODO: Update placeholder value.
+
+						// The A1 notation of a range to search for a logical table of data.
+						// Values will be appended after the last row of the table.
+						range: 'vewedding!A2:B2',  // TODO: Update placeholder value.
+
+						// How the input data should be interpreted.
+						valueInputOption: 'RAW',  // TODO: Update placeholder value.
+
+						// How the input data should be inserted.
+						insertDataOption: 'INSERT_ROWS',  // TODO: Update placeholder value.
+					};
+					
+					var valueRangeBody = {
+						// TODO: Add desired properties to the request body.
+						"values": [
+							[$("#name").val(), $("#email").val()]
+						]
+					};
+				
+					gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody).then(function(response) {
+						console.log(response.result);
+						gapi.auth2.getAuthInstance().signOut();
+					}, function(response) {
+						console.log('Error: ' + response.result.error.message);
+						gapi.auth2.getAuthInstance().signOut();
+					});
 				}
-			});*/
+			})
 		}
 	</script>
 	</body>
