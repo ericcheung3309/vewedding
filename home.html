@@ -398,13 +398,29 @@
 		}
 		
 		function submitRequest(){
-			gapi.client.sheets.spreadsheets.values.append({
-				spreadsheetId: '1-zplq7M61_o4389rnD-mS075-Ds1k-qqVnGQX9aH4t4',
-				range: 'vewedding!A2',
-			}).then(function(response) {
-				
+			var params = {
+				// The ID of the spreadsheet to update.
+				spreadsheetId: '1-zplq7M61_o4389rnD-mS075-Ds1k-qqVnGQX9aH4t4',  // TODO: Update placeholder value.
+
+				// The A1 notation of a range to search for a logical table of data.
+				// Values will be appended after the last row of the table.
+				range: 'vewedding!A2',  // TODO: Update placeholder value.
+
+				// How the input data should be interpreted.
+				valueInputOption: 'RAW',  // TODO: Update placeholder value.
+
+				// How the input data should be inserted.
+				insertDataOption: '',  // TODO: Update placeholder value.
+			};
+			
+			var valueRangeBody = {
+				// TODO: Add desired properties to the request body.
+			};
+		
+			gapi.client.sheets.spreadsheets.values.append(parames, valueRangeBody).then(function(response) {
+				console.log(response.result);
 			}, function(response) {
-			  console.log('Error: ' + response.result.error.message);
+				console.log('Error: ' + response.result.error.message);
 			});
 			
 			/*var param = "{\"values\": [[\"aaaa\"]]}";
