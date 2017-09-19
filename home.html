@@ -271,7 +271,7 @@
 	<script>
 		// Client ID and API key from the Developer Console
 		var API_KEY = "AIzaSyA59MYhfjsDAIr5_BMLz31j9AqHjii7FMg";
-		var CLIENT_ID = "661151747038-rtbjj3f7eh1vap4ivk9mi33tue70597b.apps.googleusercontent.com";
+		var CLIENT_ID = "661151747038-o8qocp5tnq0fcc687m4u5nmqbg3pk531.apps.googleusercontent.com";
 
 		// Array of API discovery doc URLs for APIs used by the quickstart
 		var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
@@ -331,8 +331,19 @@
 				scope: SCOPES
 			}).then(function () {
 				// Listen for sign-in state changes.
-				//gapi.auth2.getAuthInstance().isSignedIn.listen();
+				gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+				// Handle the initial sign-in state.
+				updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
 			});
+		}
+		
+		function updateSigninStatus(isSignedIn) {
+			if (isSignedIn) {
+				console.log("isSignedIn");
+			} else {
+				console.log("!isSignedIn");
+			}
 		}
 
 		
@@ -385,14 +396,14 @@
 		}
 		
 		function submitRequest(){
-			/*gapi.client.sheets.spreadsheets.values.append({
+			gapi.client.sheets.spreadsheets.values.append({
 				spreadsheetId: '1-zplq7M61_o4389rnD-mS075-Ds1k-qqVnGQX9aH4t4',
 				range: 'vewedding!A2',
 			}).then(function(response) {
 				
 			}, function(response) {
 			  console.log('Error: ' + response.result.error.message);
-			});*/
+			});
 			
 			/*var param = "{\"values\": [[\"aaaa\"]]}";
 			$.ajax({
