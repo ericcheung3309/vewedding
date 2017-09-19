@@ -747,7 +747,8 @@ figure {
 
 #fh5co-started .form-inline .form-group .form-control {
   width: 100%;
-  padding: 27px 20px !important;
+  height: 54px;
+  /* padding: 27px 20px !important; */
 }
 
 #fh5co-started .heading-section {
