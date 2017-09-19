@@ -396,7 +396,9 @@
 		}
 		
 		function submitRequest(){
-			gapi.auth2.getAuthInstance().signIn();
+			if(!gapi.auth2.getAuthInstance().isSignedIn.get()) {
+				gapi.auth2.getAuthInstance().signIn();
+			}
 			
 			var params = {
 				// The ID of the spreadsheet to update.
@@ -422,9 +424,10 @@
 		
 			gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody).then(function(response) {
 				console.log(response.result);
+				gapi.auth2.getAuthInstance().signOut();
 			}, function(response) {
 				console.log('Error: ' + response.result.error.message);
-				//gapi.auth2.getAuthInstance().signOut();
+				gapi.auth2.getAuthInstance().signOut();
 			});
 			
 			/*var param = "{\"values\": [[\"aaaa\"]]}";
