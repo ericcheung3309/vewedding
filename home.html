@@ -397,7 +397,11 @@
 		
 		function submitRequest(){
 			if(!gapi.auth2.getAuthInstance().isSignedIn.get()) {
-				gapi.auth2.getAuthInstance().signIn();
+				gapi.auth2.getAuthInstance().signIn({
+					callback: function(response){
+						alert("aaa");
+					}
+				});
 			}
 			
 			var params = {
