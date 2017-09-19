@@ -404,7 +404,7 @@
 
 				// The A1 notation of a range to search for a logical table of data.
 				// Values will be appended after the last row of the table.
-				range: 'vewedding!A2',  // TODO: Update placeholder value.
+				range: 'vewedding!A2:B2',  // TODO: Update placeholder value.
 
 				// How the input data should be interpreted.
 				valueInputOption: 'RAW',  // TODO: Update placeholder value.
@@ -415,6 +415,9 @@
 			
 			var valueRangeBody = {
 				// TODO: Add desired properties to the request body.
+				"values": [
+					[$("#name").val(), $("#email").val()]
+				]
 			};
 		
 			gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody).then(function(response) {
