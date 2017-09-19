@@ -279,8 +279,7 @@
 		function redirectHttpToHttps(){
 			var httpURL= window.location.hostname + window.location.pathname + window.location.search;
 			console.log(httpURL);
-			alert(window.location.hostname);
-			if($.trim(window.location.hostname) == "" || $.trim(httpURL.toLowerCase()).indexOf("https") > -1){
+			if($.trim(window.location.hostname) == "" || $.trim(window.location.protocol.toLowerCase()) == "https:"){
 				return;
 			}else {
 				var httpsURL= "https://" + httpURL;
