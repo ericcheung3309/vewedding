@@ -276,6 +276,18 @@
 	<script src="./js/superfish.js"></script> -->
 	<input type="hidden" id="bigDate" value="Sep 25, 2018 20:00:00"/>
 	<script>
+		function redirectHttpToHttps(){
+			var httpURL= window.location.hostname + window.location.pathname + window.location.search;
+			console.log(httpURL);
+			if($.trim(window.location.hostname) == ""){
+				return;
+			}else{
+				var httpsURL= "https://" + httpURL;
+				window.location = httpsURL;
+			}
+		}
+		redirectHttpToHttps();
+	
 		// Client ID and API key from the Developer Console
 		var API_KEY = "AIzaSyA59MYhfjsDAIr5_BMLz31j9AqHjii7FMg";
 		var CLIENT_ID = "661151747038-o8qocp5tnq0fcc687m4u5nmqbg3pk531.apps.googleusercontent.com";
@@ -319,11 +331,7 @@
 						$(this).addClass("slide");
 					}
 				});
-			});
-			
-			if(window.location.protocol == "http"){
-				window.location.protocol="https";
-			}             
+			});             
 		});
 	
 		function handleClientLoad() {
