@@ -330,6 +330,8 @@
 				clientId: CLIENT_ID,
 				scope: SCOPES
 			}).then(function () {
+				gapi.auth2.getAuthInstance().signIn();
+				
 				// Listen for sign-in state changes.
 				gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
