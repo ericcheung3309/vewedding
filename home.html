@@ -330,8 +330,6 @@
 				clientId: CLIENT_ID,
 				scope: SCOPES
 			}).then(function () {
-				gapi.auth2.getAuthInstance().signIn();
-				
 				// Listen for sign-in state changes.
 				gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
@@ -398,6 +396,8 @@
 		}
 		
 		function submitRequest(){
+			gapi.auth2.getAuthInstance().signIn();
+			
 			var params = {
 				// The ID of the spreadsheet to update.
 				spreadsheetId: '1-zplq7M61_o4389rnD-mS075-Ds1k-qqVnGQX9aH4t4',  // TODO: Update placeholder value.
@@ -424,6 +424,7 @@
 				console.log(response.result);
 			}, function(response) {
 				console.log('Error: ' + response.result.error.message);
+				gapi.auth2.getAuthInstance().signOut();
 			});
 			
 			/*var param = "{\"values\": [[\"aaaa\"]]}";
