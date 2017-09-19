@@ -225,6 +225,7 @@
 							</div>
 							<div class="col-md-4 col-sm-4">
 								<input type="button" class="btn btn-primary btn-block" onclick="javascript:submitRequest();" value="I am Attending"></input>
+								<button id="signout-button" style="display: none;">Sign Out</button>
 							</div>
 						</form>
 					</div>
@@ -335,17 +336,24 @@
 
 				// Handle the initial sign-in state.
 				updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+				
+				document.getElementById('signout-button').onclick = handleSignoutClick;
 			});
 		}
 		
 		function updateSigninStatus(isSignedIn) {
 			if (isSignedIn) {
 				console.log("isSignedIn");
+				document.getElementById('signout-button').style.display = 'block';
 			} else {
 				console.log("!isSignedIn");
+				document.getElementById('signout-button').style.display = 'none';
 			}
 		}
 
+		function handleSignOutClick(event) {
+			gapi.auth2.getAuthInstance().signOut();
+		}
 		
 		// Set the date we're counting down to
 		var countDownDate = new Date($("#bigDate").val()).getTime();
@@ -395,48 +403,56 @@
 			});
 		}
 		
-		function signInGoogle(){
-			var deferred = $.Deferred();
-			if(!gapi.auth2.getAuthInstance().isSignedIn.get()) {
-				gapi.auth2.getAuthInstance().signIn();
-			}
-			return deferred.resolve(true);
-		}
-		
 		function submitRequest(){
-			var signIn = signInGoogle().done(function(ret){
-				if(ret){
-					var params = {
-						// The ID of the spreadsheet to update.
-						spreadsheetId: '1-zplq7M61_o4389rnD-mS075-Ds1k-qqVnGQX9aH4t4',  // TODO: Update placeholder value.
+			gapi.auth2.getAuthInstance().signIn();
+			
+			var params = {
+				// The ID of the spreadsheet to update.
+				spreadsheetId: '1-zplq7M61_o4389rnD-mS075-Ds1k-qqVnGQX9aH4t4',  // TODO: Update placeholder value.
 
-						// The A1 notation of a range to search for a logical table of data.
-						// Values will be appended after the last row of the table.
-						range: 'vewedding!A2:B2',  // TODO: Update placeholder value.
+				// The A1 notation of a range to search for a logical table of data.
+				// Values will be appended after the last row of the table.
+				range: 'vewedding!A2:B2',  // TODO: Update placeholder value.
 
-						// How the input data should be interpreted.
-						valueInputOption: 'RAW',  // TODO: Update placeholder value.
+				// How the input data should be interpreted.
+				valueInputOption: 'RAW',  // TODO: Update placeholder value.
 
-						// How the input data should be inserted.
-						insertDataOption: 'INSERT_ROWS',  // TODO: Update placeholder value.
-					};
-					
-					var valueRangeBody = {
-						// TODO: Add desired properties to the request body.
-						"values": [
-							[$("#name").val(), $("#email").val()]
-						]
-					};
-				
-					gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody).then(function(response) {
-						console.log(response.result);
-						gapi.auth2.getAuthInstance().signOut();
-					}, function(response) {
-						console.log('Error: ' + response.result.error.message);
-						gapi.auth2.getAuthInstance().signOut();
-					});
+				// How the input data should be inserted.
+				insertDataOption: 'INSERT_ROWS',  // TODO: Update placeholder value.
+			};
+			
+			var valueRangeBody = {
+				// TODO: Add desired properties to the request body.
+				"values": [
+					[$("#name").val(), $("#email").val()]
+				]
+			};
+		
+			gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody).then(function(response) {
+				console.log(response.result);
+			}, function(response) {
+				console.log('Error: ' + response.result.error.message);
+				gapi.auth2.getAuthInstance().signOut();
+			});
+			
+			/*var param = "{\"values\": [[\"aaaa\"]]}";
+			$.ajax({
+				async: false,
+				url: "https://sheets.googleapis.com/v4/spreadsheets/1-zplq7M61_o4389rnD-mS075-Ds1k-qqVnGQX9aH4t4/values/A1:append",
+				type: 'POST',
+				data: $.parseJSON(param),
+				timeout: 1000,
+				cache: false,
+				error: function(XMLHttpRequest, textStatus, errorThrown) {
+				},
+				success: function(data, textStatus, XMLHttpRequest) {
+					if(XMLHttpRequest.responseText != null && XMLHttpRequest.responseText.length > 0){
+						alert("aaa");
+					}else{
+						alert("bbb");
+					}
 				}
-			})
+			});*/
 		}
 	</script>
 	</body>
