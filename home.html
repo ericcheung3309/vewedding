@@ -528,6 +528,8 @@
 					console.log(response.result);
 					gapi.auth2.getAuthInstance().signOut();
 					
+					$("#name").val("");
+					$("#email").val("");
 					// show Snack bar
 					var x = document.getElementById("snackbar")
 					x.className = "show";
