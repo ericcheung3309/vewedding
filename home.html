@@ -22,6 +22,9 @@
 	
 	<link rel="stylesheet" href="css/style.css">
 	<style>
+		.selectInvalid {
+			border: 1px solid red;
+		}
 		.slideanim {visibility:hidden;}
 		.slide {
 		  animation-name: slide;
@@ -302,11 +305,11 @@
 							</div>
 							<div class="col-md-4 col-sm-4">
 								<div class="form-group">
-									<input type="email" class="form-control" id="email" placeholder="Email">
+									<input type="email" class="form-control" id="email" placeholder="Email" onchange="javascript:checkEmailFormat(this);">
 								</div>
 							</div>
 							<div class="col-md-4 col-sm-4">
-								<button type="button" class="btn btn-primary btn-block" onclick="javascript:submitRequest();">I am Attending</button>
+								<button type="button" class="btn btn-primary btn-block" id="submitBtn" onclick="javascript:submitRequest();">I am Attending</button>
 								<!-- <button id="signout-button" style="display: none;">Sign Out</button> -->
 							</div>
 						</form>
@@ -497,6 +500,17 @@
 				map: map,
 				title: '九龍半山 Club ONE - 農圃道18號UG層'
 			});
+		}
+		
+		function checkEmailFormat(obj){
+			var email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+			if(!email_regex.test($(obj).val())){
+				$("#email").addClass("selectInvalid");
+				$("#submitBtn").prop("disabled", true);
+			}else{
+				$("#email").removeClass("selectInvalid");
+				$("#submitBtn").prop("disabled", false);
+			}
 		}
 		
 		function submitRequest(){
