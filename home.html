@@ -514,6 +514,18 @@
 		}
 		
 		function submitRequest(){
+			if($.trim($("#name").val()) == ""){
+				$("#name").addClass("selectInvalid");
+				$("#submitBtn").prop("disabled", true);
+				return false;
+			}
+			
+			if($.trim($("#email").val()) == ""){
+				$("#email").addClass("selectInvalid");
+				$("#submitBtn").prop("disabled", true);
+				return false;
+			}
+		
 			Promise.resolve(gapi.auth2.getAuthInstance().signIn())
 			.then(() => {
 				var params = {
