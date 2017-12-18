@@ -300,12 +300,16 @@
 						<form class="form-inline">
 							<div class="col-md-4 col-sm-4">
 								<div class="form-group">
-									<input type="name" class="form-control" id="name" placeholder="Name">
+									<input type="name" class="form-control" id="name" placeholder="Name" onblur="javascript:checkMandatory(this);">
+									<div id="name_info">
+									</div>
 								</div>
 							</div>
 							<div class="col-md-4 col-sm-4">
 								<div class="form-group">
-									<input type="email" class="form-control" id="email" placeholder="Email" onchange="javascript:checkEmailFormat(this);">
+									<input type="email" class="form-control" id="email" placeholder="Email" onblur="javascript:checkEmailFormat(this);">
+									<div id="email_info">
+									</div>
 								</div>
 							</div>
 							<div class="col-md-4 col-sm-4">
@@ -357,6 +361,8 @@
 	<script src="./js/superfish.js"></script> -->
 	<input type="hidden" id="bigDate" value="Sep 25, 2018 20:00:00"/>
 	<script>
+		const mandatoryMsg = {"email":"Please provide email address.", "name":"Please provide name."};
+	
 		function redirectHttpToHttps(){
 			var httpURL= window.location.hostname + window.location.pathname + window.location.search;
 			console.log(httpURL);
@@ -502,30 +508,49 @@
 			});
 		}
 		
+		function addMsgToEle(eleId, msg){
+			$("#" + eleId + "_info").html(msg);
+		}
+
 		function checkEmailFormat(obj){
+			if(!checkMandatory(obj)){
+				return false;
+			}
+		
 			var email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
 			if(!email_regex.test($(obj).val())){
 				$("#email").addClass("selectInvalid");
 				$("#submitBtn").prop("disabled", true);
+				addMsgToEle($(obj).attr("id"), "Please provide a valid email address.");
 			}else{
 				$("#email").removeClass("selectInvalid");
 				$("#submitBtn").prop("disabled", false);
+				addMsgToEle($(obj).attr("id"), "");
+			}
+		}
+		
+		function checkMandatory(obj){
+			if($.trim($("#" + $(obj).attr("id")).val()) == ""){
+				$("#" + $(obj).attr("id")).addClass("selectInvalid");
+				$("#submitBtn").prop("disabled", true);
+				addMsgToEle($(obj).attr("id"), mandatoryMsg[$(obj).attr("id")]);
+				return false;
+			}else{
+				$("#" + $(obj).attr("id")).removeClass("selectInvalid");
+				$("#submitBtn").prop("disabled", false);
+				addMsgToEle($(obj).attr("id"), "");
+				return true;
 			}
 		}
 		
 		function submitRequest(){
-			if($.trim($("#name").val()) == ""){
-				$("#name").addClass("selectInvalid");
-				$("#submitBtn").prop("disabled", true);
-				return false;
+			var inputList = [$("#name"), $("#email")];
+			for(var i = 0 ; i < inputList.length ; i++){
+				if(!checkMandatory(inputList[i])){
+					return false;
+				}
 			}
 			
-			if($.trim($("#email").val()) == ""){
-				$("#email").addClass("selectInvalid");
-				$("#submitBtn").prop("disabled", true);
-				return false;
-			}
-		
 			Promise.resolve(gapi.auth2.getAuthInstance().signIn())
 			.then(() => {
 				var params = {
