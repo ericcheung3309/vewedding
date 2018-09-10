@@ -34,6 +34,7 @@
 		  -webkit-animation-duration: 1s;
 		  visibility: visible;
 		}
+		.slideanim_scrollicon_h {visibility:hidden;}
 		@keyframes slide {
 			0% {
 				opacity: 0;
@@ -114,6 +115,7 @@
 									<h1>The Wedding</h1>
 									<h2>Vikki &amp; Eric</h2>
 									<p>25.09.2018</p>
+									<div style="color:#FFFFFF" class="slideanim_scrollicon"><span class="glyphicon glyphicon-triangle-bottom" ></span><span>SCROLL</span></div>
 								</div>
 							</div>
 						</div>
@@ -487,6 +489,15 @@
 					var winTop = $(window).scrollTop();
 					if (pos < winTop + 600) {
 						$(this).addClass("slide");
+					}
+				});
+				
+				$(".slideanim_scrollicon").each(function(){
+					var winTop = $(window).scrollTop();
+					if(winTop > 0){
+						$(this).addClass("slideanim_scrollicon_h");
+					}else {
+						$(this).removeClass("slideanim_scrollicon_h");
 					}
 				});
 			});
