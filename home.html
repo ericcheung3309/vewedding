@@ -165,10 +165,10 @@
 				<div class="col-md-8 col-md-offset-2 text-center animate-box">
 					<div class="col-md-10 col-md-offset-1">
 						<div class="animate-box">
-							<h1>Our Big Day is Coming!</h1>
+							<h1 id="bigDayComingh1">Our Big Day is Coming!</h1>
 						</div>
 					</div>
-					<p class="countdown">
+					<p id="countdown" class="countdown">
 						<span id="days"></span>
 						<span id="hours"></span>
 						<span id="minutes"></span>
@@ -574,7 +574,11 @@
 			// If the count down is finished, write some text 
 			if (distance < 0) {
 				clearInterval(x);
-				document.getElementById("demo").innerHTML = "The Wedding Ceremony is Over";
+				$("#bigDayComingh1").remove();
+				
+				$("#countdown").empty();
+				$("#countdown").append($("<span>The Wedding Ceremony is Over</span>"));
+				//document.getElementById("countdown").innerHTML = "The Wedding Ceremony is Over";
 			}
 		}, 1000);
 		
